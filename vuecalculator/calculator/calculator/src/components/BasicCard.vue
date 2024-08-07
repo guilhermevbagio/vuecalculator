@@ -7,27 +7,19 @@
             <!-- Numeric keypad -->
             <div class="grid grid-cols-3 gap-1 gap-x-5 flex-grow">
                 <div v-for="i in 9" :key="i">
-                    <button @click="onNumberClicked(i.toString())"> 
-                        <GenericButton :text="i.toString()"/> 
-                    </button>
+                    <GenericButton :text="i.toString()" @click="onNumberClicked(i.toString())"/> 
                 </div>
-                <button @click="onNumberClicked('.')"> 
-                    <GenericButton text="." /> 
-                </button>
-                <button @click="onNumberClicked(0)"> 
-                    <GenericButton text="0" /> 
-                </button>
-                <button @click="clear()"> 
-                    <GenericButton text="C" color="bg-red-500"/> 
-                </button>
+                <GenericButton text="."  @click="onNumberClicked('.')"/> 
+                <GenericButton text="0" @click="onNumberClicked(0)"/> 
+                <GenericButton text="C" color="bg-red-500" @click="clear()"/> 
             </div>
 
             <!-- Operations -->
             <div class="flex flex-col justify-between space-y-1">
-                <button @click="removeNumber()"> <GenericButton text="<-" color="bg-red-500" /> </button>
-                <button @click="sumButton()"> <GenericButton text="+" color="bg-red-500"/> </button>
-                <button @click="subButton()"> <GenericButton text="-" color="bg-red-500"/> </button>
-                <button @click="equals()"> <GenericButton text="=" color="bg-red-500"/> </button>
+                <GenericButton text="<-" color="bg-red-500" @click="removeNumber()"/>
+                <GenericButton text="+" color="bg-red-500" @click="sumButton()"/>
+                <GenericButton text="-" color="bg-red-500" @click="subButton()"/>
+                <GenericButton text="=" color="bg-red-500" @click="equals()"/>
             </div>
         </div>
     </div>
