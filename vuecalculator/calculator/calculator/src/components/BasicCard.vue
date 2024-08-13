@@ -1,11 +1,11 @@
 <template>
-    <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
+    <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
         <Display :displayValue="displayValue"></Display>
 
 
-        <div class="flex space-x-5">
+        <div class="flex space-x-1 flex-grow">
             <!-- Numeric keypad -->
-            <div class="grid grid-cols-3 gap-1 gap-x-5 flex-grow">
+            <div class="grid grid-cols-3 gap-1 flex-grow">
                 <div v-for="i in 9" :key="i">
                     <GenericButton :text="i.toString()" @click="onNumberClicked(i.toString())"/> 
                 </div>
@@ -15,12 +15,16 @@
             </div>
 
             <!-- Operations -->
-            <div class="flex flex-col justify-between space-y-1">
-                <GenericButton text="<-" color="bg-red-500" @click="removeNumber()"/>
-                <GenericButton text="+" color="bg-red-500" @click="sumButton()"/>
-                <GenericButton text="-" color="bg-red-500" @click="subButton()"/>
-                <GenericButton text="=" color="bg-red-500" @click="equals()"/>
+            <div class="grid gap-1 grid-rows-4 grid-flow-col-dense">
+                <GenericButton text="*" color="bg-orange-500" @click="multiplyButton()"/>
+                <GenericButton text="/" color="bg-orange-500" @click="divButton()"/>
+                <GenericButton text="+" color="bg-orange-500" @click="sumButton()"/>
+                <GenericButton text="-" color="bg-orange-500" @click="subButton()"/>
+
+                <GenericButton text="<-" color="bg-red-500" class="row-span-3" @click="removeNumber()"/>
+                <GenericButton text="=" color="bg-green-500" @click="equals()"/>
             </div>
+
         </div>
     </div>
 </template>
@@ -37,9 +41,13 @@
     }) 
 
     function onNumberClicked(arg) {
-        if(displayValue.value === "0") {
+
+        if(displayValue.value == "0") {
             displayValue.value = arg;
             return;
+        }
+        if(arg == "."){
+            if(displayValue.value.includes(".")) return;
         }
         displayValue.value = displayValue.value + arg;
 
@@ -59,7 +67,13 @@
     let operationFlag = 0;
 
     function cacheValue(arg){
-        valueCache = arg;
+        switch(operationFlag){
+            case 1: valueCache = sum(valueCache, arg); break;
+            case 2: valueCache = sub(valueCache, arg); break;
+            case 3: valueCache = multiply(valueCache, arg); break;
+            case 4: valueCache = divide(valueCache, arg); break;
+            default: valueCache = arg; break;
+        }
     }
 
     function clear(){
@@ -71,16 +85,29 @@
     }
 
     function sumButton(){
-        cacheValue(parseFloat( displayValue.value) + parseFloat(valueCache));
+        cacheValue(parseFloat( displayValue.value));
         operationFlag = 1;
         clear();
     }
     function subButton(){
-        if(valueCache === 0){
-            valueCache = parseFloat(displayValue.value);
-        }
-        else cacheValue(parseFloat(valueCache) - parseFloat( displayValue.value));
+
+        valueCache = parseFloat(displayValue.value);
+        
         operationFlag = 2;
+        clear();
+    }
+    function multiplyButton(){
+        
+        cacheValue(parseFloat( displayValue.value));
+
+        operationFlag = 3;
+        clear();
+    }
+    function divButton(){
+
+        cacheValue(parseFloat( displayValue.value));
+        
+        operationFlag = 4;
         clear();
     }
 
@@ -89,6 +116,12 @@
     }
     function sub(a, b){
         return a - b;
+    }
+    function multiply(a, b){
+        return a * b;
+    }
+    function divide(a, b){
+        return a / b;
     }
 
     function equals(){
@@ -99,6 +132,15 @@
                 break;
             case 2:
                 displayValue.value = sub(valueCache, parseFloat(displayValue.value)).toString();
+                clearCache();
+                break;
+
+            case 3:
+                displayValue.value = multiply(valueCache, parseFloat(displayValue.value)).toString();
+                clearCache();
+                break;
+            case 4:
+                displayValue.value = divide(valueCache, parseFloat(displayValue.value)).toString();
                 clearCache();
                 break;
             default:
