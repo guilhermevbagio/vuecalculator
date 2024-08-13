@@ -3,7 +3,7 @@
         <Display :displayValue="displayValue"></Display>
 
 
-        <div class="flex space-x-1 flex-grow">
+        <div class="flex space-x-1 flex-grow flex-shrink">
             <!-- Numeric keypad -->
             <div class="grid grid-cols-3 gap-1 flex-grow">
                 <div v-for="i in 9" :key="i">
