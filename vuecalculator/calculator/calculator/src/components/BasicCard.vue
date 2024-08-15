@@ -16,13 +16,13 @@
 
             <!-- Operations -->
             <div class="grid gap-1 grid-rows-4 grid-flow-col-dense">
-                <GenericButton text="*" color="bg-orange-500" @click="multiplyButton()"/>
-                <GenericButton text="/" color="bg-orange-500" @click="divButton()"/>
-                <GenericButton text="+" color="bg-orange-500" @click="sumButton()"/>
-                <GenericButton text="-" color="bg-orange-500" @click="subButton()"/>
+                <GenericButton text="*" color="bg-orange-600" @click="multiplyButton()"/>
+                <GenericButton text="/" color="bg-orange-600" @click="divButton()"/>
+                <GenericButton text="+" color="bg-orange-600" @click="sumButton()"/>
+                <GenericButton text="-" color="bg-orange-600" @click="subButton()"/>
 
                 <GenericButton text="<-" color="bg-red-500" class="row-span-3" @click="removeNumber()"/>
-                <GenericButton text="=" color="bg-green-500" @click="equals()"/>
+                <GenericButton text="=" color="bg-green-700" @click="equals()"/>
             </div>
 
         </div>
@@ -33,12 +33,18 @@
     import Display from './Display.vue';
     import GenericButton from './GenericButton.vue';
     import { ref } from 'vue';
+    import{ useStore } from "./historyStore.js"
 
     let displayValue = ref("0");
 
-    var props = defineProps({
+    const store = useStore();
 
-    }) 
+    function storeValue(arg){
+        store.addOperation(arg);
+    }
+    function removeStoreValue(){
+
+    }
 
     function onNumberClicked(arg) {
 
@@ -51,6 +57,7 @@
         }
         displayValue.value = displayValue.value + arg;
 
+        storeValue(arg);
     }
 
     function removeNumber(){
@@ -61,6 +68,8 @@
         }
 
         displayValue.value = displayValue.value.slice(0, -1);
+
+        removeStoreValue();
     }
 
     let valueCache = 0;
@@ -88,6 +97,8 @@
         cacheValue(parseFloat( displayValue.value));
         operationFlag = 1;
         clear();
+
+        storeValue(" + ")
     }
     function subButton(){
 
@@ -95,6 +106,8 @@
         
         operationFlag = 2;
         clear();
+
+        storeValue(" - ")
     }
     function multiplyButton(){
         
@@ -102,6 +115,8 @@
 
         operationFlag = 3;
         clear();
+
+        storeValue(" * ")
     }
     function divButton(){
 
@@ -109,6 +124,8 @@
         
         operationFlag = 4;
         clear();
+
+        storeValue(" / ")
     }
 
     function sum(a, b){
@@ -146,6 +163,8 @@
             default:
                 break;
         }
+
+        storeValue(" = " + displayValue.value + "\n");
     }
 
 </script>
