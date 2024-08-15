@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="flex justify-center items-center h-screen bg-gray-800 cursor-pointer" >
+    <div class="flex justify-center items-center h-screen bg-gray-800" >
 
 
           <HomePage/>

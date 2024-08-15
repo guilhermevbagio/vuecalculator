@@ -43,11 +43,11 @@
         store.addOperation(arg);
     }
     function removeStoreValue(){
-
+        store.removeNumber();
     }
 
     function onNumberClicked(arg) {
-
+        
         if(displayValue.value == "0") {
             displayValue.value = arg;
             return;
@@ -57,7 +57,7 @@
         }
         displayValue.value = displayValue.value + arg;
 
-        storeValue(arg);
+
     }
 
     function removeNumber(){
@@ -76,6 +76,7 @@
     let operationFlag = 0;
 
     function cacheValue(arg){
+        storeValue("> " + arg);
         switch(operationFlag){
             case 1: valueCache = sum(valueCache, arg); break;
             case 2: valueCache = sub(valueCache, arg); break;
@@ -142,7 +143,10 @@
     }
 
     function equals(){
+        let temp = displayValue.value;
+
         switch(operationFlag){
+            case 0: return;
             case 1:
                 displayValue.value = sum(valueCache, parseFloat(displayValue.value)).toString();
                 clearCache();
@@ -163,8 +167,11 @@
             default:
                 break;
         }
+        storeValue(temp);
+        storeValue(" = " + displayValue.value);
+        storeValue("\n");
 
-        storeValue(" = " + displayValue.value + "\n");
+        console.log(store.history);
     }
 
 </script>
